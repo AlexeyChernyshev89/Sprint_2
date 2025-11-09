@@ -1,7 +1,6 @@
 package service;
 
 import model.Food;
-import model.Discountable;
 
 public class ShoppingCart {
     private Food[] items;
@@ -14,14 +13,7 @@ public class ShoppingCart {
     public double getTotalPriceWithoutDiscount() {
         double total = 0;
         for (Food item : items) {
-            if (item instanceof Discountable) {
-                Discountable discountable = (Discountable) item;
-                double discount = discountable.getDiscount();
-                double itemTotal = item.getAmount() * item.getPrice();
-                total += itemTotal;
-            } else {
-                total += item.getAmount() * item.getPrice();
-            }
+            total += item.getAmount() * item.getPrice();
         }
         return total;
     }
@@ -30,11 +22,10 @@ public class ShoppingCart {
     public double getTotalPriceWithDiscount() {
         double total = 0;
         for (Food item : items) {
-            if (item instanceof Discountable) {
-                total += item.getTotalPrice();
-            } else {
-                total += item.getAmount() * item.getPrice();
-            }
+            double itemTotal = item.getAmount() * item.getPrice();
+            double discount = item.getDiscount(); // Все объекты Food имеют этот метод
+            itemTotal -= itemTotal * (discount / 100);
+            total += itemTotal;
         }
         return total;
     }
